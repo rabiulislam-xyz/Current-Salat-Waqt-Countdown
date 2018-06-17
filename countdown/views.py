@@ -152,5 +152,5 @@ def get_current_waqt_for_chatfuel(request):
         ]
     }
 
-    return HttpResponse(response, status=200)
+    return JsonResponse(response, status=200)
 
