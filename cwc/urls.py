@@ -21,5 +21,6 @@ from countdown.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('get_current_waqt/', get_current_waqt, name='get_current_waqt'),
+    path('get_current_waqt_for_web/', get_current_waqt_for_web, name='get_current_waqt_for_web'),
+    path('get_current_waqt_for_chatfuel/', get_current_waqt_for_chatfuel, name='get_current_waqt_for_chatfuel'),
 ]
