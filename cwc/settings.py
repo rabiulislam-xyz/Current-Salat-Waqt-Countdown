@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'countdown',
+    'import_export',
 ]
 
 MIDDLEWARE = [
