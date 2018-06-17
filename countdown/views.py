@@ -91,7 +91,7 @@ def get_current_waqt(now=None, city=None):
     elif now >= waqt_times["asr_start"] and now <= waqt_times["asr_end"]:
         response = {
             "waqt": "asr",
-            "end_time": waqt_times["asr_end"].strftime('%H:%M %d/%m/%Y'),
+            "end_time": waqt_times["asr_end"].strftime('%I:%M %p'),
             'end_timestamp': waqt_times["asr_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
@@ -101,7 +101,7 @@ def get_current_waqt(now=None, city=None):
     elif now >= waqt_times["magrib_start"]and now <= waqt_times["magrib_end"]:
         response = {
             "waqt": "magrib",
-            "end_time": waqt_times["magrib_end"].strftime('%H:%M %d/%m/%Y'),
+            "end_time": waqt_times["magrib_end"].strftime('%I:%M %p'),
             'end_timestamp': waqt_times["magrib_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
@@ -111,7 +111,7 @@ def get_current_waqt(now=None, city=None):
     elif now >= waqt_times["isha_start"] and now <= waqt_times["isha_end"]:
         response = {
             "waqt": "isha",
-            "end_time": waqt_times["isha_end"].strftime('%H:%M %d/%m/%Y'),
+            "end_time": waqt_times["isha_end"].strftime('%I:%M %p'),
             'end_timestamp': waqt_times["isha_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
@@ -121,9 +121,11 @@ def get_current_waqt(now=None, city=None):
     else:
         response = {
             "waqt": "unknown",
-            "status": "not ok",
+            "end_time": "unknown",
+            'end_timestamp': "unknown",
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
+            "remaining_time": "unknown",
         }
 
     return response
