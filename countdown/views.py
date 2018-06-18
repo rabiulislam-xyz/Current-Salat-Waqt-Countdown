@@ -1,8 +1,7 @@
-import json
-import requests
-
 from pprint import pprint as print
-from django.http import JsonResponse, HttpResponse
+
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils.timezone import datetime, timedelta
 
 from .models import Waqt
@@ -61,61 +60,67 @@ def get_current_waqt(now=None, city=None):
     if now >= waqt_times["fazr_start"] and now <= waqt_times["fazr_end"]:
         response = {
             "waqt": "fazr",
-            "end_time": waqt_times["fazr_end"].strftime('%I:%M %p'),
+            "end_time": waqt_times["fazr_end"],
             'end_timestamp': waqt_times["fazr_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
             "remaining_time": get_time_from_seconds(waqt_times["fazr_end"].timestamp() - now.timestamp()),
+            "city": city,
         }
 
     elif now >= waqt_times["chast_start"] and now <= waqt_times["chast_end"]:
         response = {
             "waqt": "chast",
-            "end_time": waqt_times["chast_end"].strftime('%I:%M %p'),
+            "end_time": waqt_times["chast_end"],
             'end_timestamp': waqt_times["chast_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
             "remaining_time": get_time_from_seconds(waqt_times["chast_end"].timestamp() - now.timestamp()),
+            "city": city,
         }
 
     elif now >= waqt_times["juhr_start"] and now <= waqt_times["juhr_end"]:
         response = {
             "waqt": "juhr",
-            "end_time": waqt_times["juhr_end"].strftime('%I:%M %p'),
+            "end_time": waqt_times["juhr_end"],
             'end_timestamp': waqt_times["juhr_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
             "remaining_time": get_time_from_seconds(waqt_times["juhr_end"].timestamp() - now.timestamp()),
+            "city": city,
         }
 
     elif now >= waqt_times["asr_start"] and now <= waqt_times["asr_end"]:
         response = {
             "waqt": "asr",
-            "end_time": waqt_times["asr_end"].strftime('%I:%M %p'),
+            "end_time": waqt_times["asr_end"],
             'end_timestamp': waqt_times["asr_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
             "remaining_time": get_time_from_seconds(waqt_times["asr_end"].timestamp() - now.timestamp()),
+            "city": city,
         }
 
     elif now >= waqt_times["magrib_start"]and now <= waqt_times["magrib_end"]:
         response = {
             "waqt": "magrib",
-            "end_time": waqt_times["magrib_end"].strftime('%I:%M %p'),
+            "end_time": waqt_times["magrib_end"],
             'end_timestamp': waqt_times["magrib_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
             "remaining_time": get_time_from_seconds(waqt_times["magrib_end"].timestamp() - now.timestamp()),
+            "city": city,
         }
 
     elif now >= waqt_times["isha_start"] and now <= waqt_times["isha_end"]:
         response = {
             "waqt": "isha",
-            "end_time": waqt_times["isha_end"].strftime('%I:%M %p'),
+            "end_time": waqt_times["isha_end"],
             'end_timestamp': waqt_times["isha_end"].timestamp(),
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
             "remaining_time": get_time_from_seconds(waqt_times["isha_end"].timestamp() - now.timestamp()),
+            "city": city,
         }
 
     else:
@@ -126,6 +131,7 @@ def get_current_waqt(now=None, city=None):
             "current_time": now.strftime('%H:%M %d/%m/%Y'),
             "current_timestamp": now.timestamp(),
             "remaining_time": "unknown",
+            "city": "unknown",
         }
 
     return response
@@ -133,9 +139,14 @@ def get_current_waqt(now=None, city=None):
 
 def get_current_waqt_for_web(request):
     waqt_json = get_current_waqt()
-    print(waqt_json)
-    print(type(waqt_json))
-    return JsonResponse(waqt_json, status=200)
+    print(waqt_json["end_time"])
+
+    context = {
+        'waqt': WAQT_NAME_DICT.get(waqt_json["waqt"]),
+        'end_time': waqt_json["end_time"],
+        'city': waqt_json["city"],
+    }
+    return render(request, 'current_waqt.html', context)
 
 
 def get_current_waqt_for_chatfuel(request):
@@ -145,7 +156,7 @@ def get_current_waqt_for_chatfuel(request):
         (waqt_json["remaining_time"].split(':')[0]+" ঘণ্টা ") if int(waqt_json["remaining_time"].split(':')[0]) else "",
         waqt_json["remaining_time"].split(':')[1],
         WAQT_NAME_DICT.get(waqt_json["waqt"]),
-        waqt_json["end_time"]
+        waqt_json["end_time"].strftime('%I:%M %p')
     )
 
     response = {

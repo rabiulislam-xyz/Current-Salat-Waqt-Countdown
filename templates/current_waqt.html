@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Salat Waqt</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href={% static "css/util.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/main.css" %}>
+</head>
+
+
+<body>
+    <div class="wrappic1 p-t-33">
+        <img src="{% static 'img/logo.png' %}" width="200" height="200" alt="LOGO" class="image-circle">
+    </div>
+
+    <p class="txt-center m1-txt1 p-t-33 p-b-68">
+        আজ {{ waqt }} এর শেষ সময় {{ end_time|date:'h i a' }} <br /> ওয়াক্ত শেষ হতে আর বাকি ...
+    </p>
+
+    <div class="wsize2 flex-w flex-c hsize1 cd100 countdown">
+
+        <div class="flex-col-c-m size2 how-countdown">
+            <span class="l1-txt1 p-b-9 hours">00</span>
+            <span class="s1-txt1">ঘণ্টা</span>
+        </div>
+
+        <div class="flex-col-c-m size2 how-countdown">
+            <span class="l1-txt1 p-b-9 minutes">00</span>
+            <span class="s1-txt1">মিনিট</span>
+        </div>
+
+        <div class="flex-col-c-m size2 how-countdown">
+            <span class="l1-txt1 p-b-9 seconds">00</span>
+            <span class="s1-txt1">সেকেন্ড</span>
+        </div>
+    </div>
+
+    <p class="s1-txt4 txt-center p-t-1 p-b-20">
+        নির্ধারিত শহর <strong> {{ city }}</strong>
+    </p>
+
+    <p class="s1-txt4 txt-center p-t-20 p-b-20">
+        <a href="#" class="bor">About</a> |
+        <a href="https://www.facebook.com/395255500880249" target="_blank" class="bor">Messenger Bot</a> |
+        <a href="https://habibur.com/salat/districts/{{ city|lower }}/fullyear/"  target="_blank"class="bor">Full Year Time Table</a>
+    </p>
+
+</body>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src={% static  "js/main.js" %}></script>
+
+<script>
+    $(document).ready(function() {
+        var subscribeRequest = $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/get_current_waqt_for_web/",
+        });
+
+        subscribeRequest.done(function(msg) {
+            alert("You have successfully subscribed to our mailing list.");
+        });
+
+        subscribeRequest.fail(function(jqXHR, textStatus) {
+            //alert("We could not subscribe you please try again or contact us if the problem persists (" + textStatus + ").");
+        });
+
+        $('.countdown').downCount({
+            date: '{{ end_time|date:'m/d/Y H:i:s' }}', // '06/18/2019 17:00:00'
+            offset: +6
+        }, function() {
+            location.reload();
+        });
+    })
+</script>
+</html>
