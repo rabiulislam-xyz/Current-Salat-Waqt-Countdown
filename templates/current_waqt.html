@@ -1,4 +1,5 @@
 {% load static %}
+{% load to_bn %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +19,7 @@
     </div>
 
     <p class="txt-center m1-txt1 p-t-33 p-b-68">
-        আজ {{ waqt }} এর শেষ সময় {{ end_time|date:'h i a' }} <br /> ওয়াক্ত শেষ হতে আর বাকি ...
+        আজ {{ waqt }} এর শেষ সময় {{ end_time|date:'h i a'|to_bn_number }} <br /> ওয়াক্ত শেষ হতে আর বাকি ...
     </p>
 
     <div class="wsize2 flex-w flex-c hsize1 cd100 countdown">

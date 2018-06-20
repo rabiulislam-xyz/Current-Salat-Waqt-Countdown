@@ -18,6 +18,20 @@ WAQT_NAME_DICT["chast"] = "চাশত"
 BANGLA_NUMBERS = {'1'}
 
 
+def to_bn_number(number):
+    number = number.replace('0', r'০') \
+        .replace('1', r'১') \
+        .replace('2', r'২') \
+        .replace('3', r'৩') \
+        .replace('4', r'৪') \
+        .replace('5', r'৫') \
+        .replace('6', r'৬') \
+        .replace('7', r'৭') \
+        .replace('8', r'৮') \
+        .replace('9', r'৯')
+    return number
+
+
 def get_time_from_seconds(sec):
     m, s = divmod(sec, 60)
     h, m = divmod(m, 60)
@@ -153,10 +167,10 @@ def get_current_waqt_for_chatfuel(request):
     waqt_json = get_current_waqt()
     text_respones = "এখন {} এর সময়। শেষ হতে আর {}{} মিনিট বাকি আছে। আজকে {} এর শেষ সময় {} ।".format(
         WAQT_NAME_DICT.get(waqt_json["waqt"]),
-        (waqt_json["remaining_time"].split(':')[0]+" ঘণ্টা ") if int(waqt_json["remaining_time"].split(':')[0]) else "",
-        waqt_json["remaining_time"].split(':')[1],
+        to_bn_number((waqt_json["remaining_time"].split(':')[0]+" ঘণ্টা ") if int(waqt_json["remaining_time"].split(':')[0]) else ""),
+        to_bn_number(waqt_json["remaining_time"].split(':')[1]),
         WAQT_NAME_DICT.get(waqt_json["waqt"]),
-        waqt_json["end_time"].strftime('%I:%M %p')
+        to_bn_number(waqt_json["end_time"].strftime('%I:%M %p'))
     )
 
     response = {
