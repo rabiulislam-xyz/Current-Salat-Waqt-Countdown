@@ -41,6 +41,14 @@
             return new_date;
         };
 
+        // convert english number to bangla
+        var toBn = function (num) {
+            var id = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return String(num).replace(/[0-9]/g, function (w) {
+                return id[+w]
+            });
+        }
+
         /**
          * Main downCount function that calculates everything
          */
@@ -86,10 +94,10 @@
                 ref_seconds = (seconds === 1) ? 'second' : 'seconds';
 
             // set to DOM
-            container.find('.days').text(days);
-            container.find('.hours').text(hours);
-            container.find('.minutes').text(minutes);
-            container.find('.seconds').text(seconds);
+            container.find('.days').text(toBn(days));
+            container.find('.hours').text(toBn(hours));
+            container.find('.minutes').text(toBn(minutes));
+            container.find('.seconds').text(toBn(seconds));
 
             container.find('.days_ref').text(ref_days);
             container.find('.hours_ref').text(ref_hours);
